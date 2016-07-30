@@ -21,6 +21,9 @@ namespace CalcTimeSpan {
 				string duration = Console.ReadLine();
 				if(duration.StartsWith("q",StringComparison.CurrentCultureIgnoreCase)||String.IsNullOrEmpty(duration)) {
 					skip=dic.Count==0;
+					if(!skip) {
+						dic.Add(total,total);
+					}
 					break;
 				}
 				TimeSpan result;
