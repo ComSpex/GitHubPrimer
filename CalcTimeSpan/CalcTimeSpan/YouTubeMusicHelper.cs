@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Controls;
 
 namespace CalcTimeSpan {
-	public class YouTubeMusicHelper:Window {
+	public class YouTubeMusicHelper:Window,IDisposable {
 		protected Dictionary<TimeSpan,TimeSpan> dics;
 		public YouTubeMusicHelper(Dictionary<TimeSpan,TimeSpan> dict) {
 			dics=dict;
@@ -38,10 +38,9 @@ namespace CalcTimeSpan {
 			Grid grid = new Grid();
 			grid.HorizontalAlignment=HorizontalAlignment.Stretch;
 			grid.Margin=new Thickness(0,1,0,1);
-			grid.ColumnDefinitions.Add(new ColumnDefinition());
-			grid.ColumnDefinitions.Add(new ColumnDefinition());
-			grid.ColumnDefinitions.Add(new ColumnDefinition());
-			grid.ColumnDefinitions.Add(new ColumnDefinition());
+			for(int i = 0;i<4;++i) {
+				grid.ColumnDefinitions.Add(new ColumnDefinition());
+			}
 			for(int i = 0;i<grid.ColumnDefinitions.Count;++i) {
 				grid.ColumnDefinitions[i].Width=GridLength.Auto;
 			}
@@ -79,5 +78,30 @@ namespace CalcTimeSpan {
 			item.Content=grid;
 			return item;
 		}
+		#region IDisposable Support
+		private bool disposedValue = false; // To detect redundant calls
+		protected virtual void Dispose(bool disposing) {
+			if(!disposedValue) {
+				if(disposing) {
+					// TODO: dispose managed state (managed objects).
+				}
+				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+				// TODO: set large fields to null.
+				disposedValue=true;
+			}
+		}
+		// TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+		// ~YouTubeMusicHelper() {
+		//   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+		//   Dispose(false);
+		// }
+		// This code added to correctly implement the disposable pattern.
+		public void Dispose() {
+			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+			Dispose(true);
+			// TODO: uncomment the following line if the finalizer is overridden above.
+			// GC.SuppressFinalize(this);
+		}
+		#endregion
 	}
 }
