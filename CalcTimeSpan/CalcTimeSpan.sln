@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalcTimeSpan", "CalcTimeSpa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{427C3B28-DE65-4C7B-AFCC-81E047561D41}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyBrowser", "MyBrowser\MyBrowser.csproj", "{4F09BAE1-9D27-473D-9271-70D1B155086F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{427C3B28-DE65-4C7B-AFCC-81E047561D41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{427C3B28-DE65-4C7B-AFCC-81E047561D41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{427C3B28-DE65-4C7B-AFCC-81E047561D41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F09BAE1-9D27-473D-9271-70D1B155086F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F09BAE1-9D27-473D-9271-70D1B155086F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F09BAE1-9D27-473D-9271-70D1B155086F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F09BAE1-9D27-473D-9271-70D1B155086F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

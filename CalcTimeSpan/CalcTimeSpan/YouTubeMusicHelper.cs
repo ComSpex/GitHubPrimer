@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System.IO;
 
 namespace CalcTimeSpan {
 	public class YouTubeMusicHelper:Window,IDisposable {
@@ -30,6 +31,7 @@ namespace CalcTimeSpan {
 				lb.Items.Add(Edit(i,dic));
 				++i;
 			}
+			lb.SelectedIndex=0;
 			return lb;
 		}
 		private object Edit(int index,KeyValuePair<TimeSpan,TimeSpan> dic) {
@@ -83,11 +85,42 @@ namespace CalcTimeSpan {
 		protected virtual void Dispose(bool disposing) {
 			if(!disposedValue) {
 				if(disposing) {
-					// TODO: dispose managed state (managed objects).
+					Save();
 				}
 				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
 				// TODO: set large fields to null.
 				disposedValue=true;
+			}
+		}
+		private void Save() {
+			ListBox Lb = this.Content as ListBox;
+			if(Lb.Items.Count>0) {
+				FileInfo inf = new FileInfo("output.txt");
+				if(inf.Exists) {
+					inf.Delete();
+				}
+				using(FileStream fs = inf.OpenWrite()) {
+					using(StreamWriter sw = new StreamWriter(fs)) {
+						sw.AutoFlush=true;
+						foreach(ListBoxItem item in Lb.Items) {
+							Grid grid = item.Content as Grid;
+							{
+								TextBlock tb = grid.Children[0] as TextBlock;
+								sw.Write("{0} ",tb.Text);
+							}
+							{
+								TextBox tb = grid.Children[1] as TextBox;
+								sw.Write("{0} ",tb.Text);
+							}
+							{
+								TextBox tb = grid.Children[2] as TextBox;
+								sw.Write("({0:mm:ss})",TimeSpan.Parse(tb.Text));
+							}
+							sw.WriteLine();
+						}
+						sw.Flush();
+					}
+				}
 			}
 		}
 		// TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
@@ -97,11 +130,9 @@ namespace CalcTimeSpan {
 		// }
 		// This code added to correctly implement the disposable pattern.
 		public void Dispose() {
-			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
 			Dispose(true);
-			// TODO: uncomment the following line if the finalizer is overridden above.
-			// GC.SuppressFinalize(this);
+			//GC.SuppressFinalize(this);
 		}
-		#endregion
+#endregion
 	}
 }

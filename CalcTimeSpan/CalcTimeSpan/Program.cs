@@ -20,6 +20,10 @@ namespace CalcTimeSpan {
 				Console.ResetColor();
 				for(string duration = Prompt();!isQuit(duration);) {
 					TimeSpan result;
+					if(Regex.IsMatch(duration,"[0-9]+[:][0-9]+")&&!Regex.IsMatch(duration,"[0-9]+[:][0-9]+[:][0-9]+")) {
+						// add 00: if 00:00 so that we get 00:00:00.
+						duration=String.Format("00:{0}",duration);
+					}
 					if(TimeSpan.TryParse(duration,out result)) {
 						dic.Add(total,result);
 						total+=result;
@@ -42,15 +46,17 @@ namespace CalcTimeSpan {
 			return (quit=duration.StartsWith("q",StringComparison.CurrentCultureIgnoreCase)||String.IsNullOrEmpty(duration));
 		}
 		private static string Prompt() {
-			Console.Write("Type a duration and press Enter key : ");
+			Console.Write("Type a duration (mm:ss) and press Enter key : ");
 			string duration = Console.ReadLine();
 			if(isQuit(duration)) {
 				skip=dic.Count==0;
+#if false
 				if(!skip) {
 					if(!dic.ContainsKey(total)) {
 						dic.Add(total,total);
 					}
 				}
+#endif
 			}
 			return duration;
 		}
@@ -80,7 +86,9 @@ namespace CalcTimeSpan {
 		}
 		private static void fillWithData() {
 			Application app = new Application();
-			app.Run(new YouTubeMusicHelper(dic));
+			using(YouTubeMusicHelper win = new YouTubeMusicHelper(dic)) {
+				app.Run(win);
+			}
 		}
 	}
 }
