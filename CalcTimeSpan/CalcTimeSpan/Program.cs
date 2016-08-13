@@ -37,10 +37,8 @@ namespace CalcTimeSpan {
 					break;
 				}
 			}
-			if(!skip) {
-				//Supplement();
-				fillWithData();
-			}
+			//Supplement();
+			fillWithData();
 		}
 		private static bool isQuit(string duration) {
 			return (quit=duration.StartsWith("q",StringComparison.CurrentCultureIgnoreCase)||String.IsNullOrEmpty(duration));
