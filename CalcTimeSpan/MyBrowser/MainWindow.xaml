@@ -5,15 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyBrowser"
         mc:Ignorable="d"
-        Title="Which browser?" Height="80" Width="160" WindowStyle="ToolWindow" Icon="MyBrowser.ico" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
-	<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-		<StackPanel.Resources>
-			<Style TargetType="Image">
-				<EventSetter Event="MouseUp" Handler="Image1_MouseUp" />
-				<Setter Property="Cursor" Value="Hand" />
-			</Style>
-		</StackPanel.Resources>
-		<Image x:Name="Image1_png" Source="Image1.png" Stretch="None" Tag="C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"/>
-		<Image x:Name="Image2_png" Source="Image2.png" Stretch="None" Tag="C:\Program Files (x86)\Internet Explorer\iexplore.exe"/>
+        Title="Which browser?" Height="94.479" Width="160" WindowStyle="ToolWindow" Icon="MyBrowser.ico" WindowStartupLocation="CenterOwner" ResizeMode="CanResizeWithGrip">
+	<StackPanel>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+			<StackPanel.Resources>
+				<Style TargetType="Image">
+					<EventSetter Event="MouseUp" Handler="Image1_MouseUp" />
+					<Setter Property="Cursor" Value="Hand" />
+				</Style>
+			</StackPanel.Resources>
+			<Image x:Name="Image1_png" Source="Image1.png" Stretch="None" Tag="C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"/>
+			<Image x:Name="Image2_png" Source="Image2.png" Stretch="None" Tag="C:\Program Files (x86)\Internet Explorer\iexplore.exe"/>
+			<!--
+		<Image x:Name="BookShelf_png" Source="BookShelf.png" Stretch="None" Tag="C:\Program Files (x86)\Microsoft Reference\Microsoft Bookshelf 3.0\BS3.exe"/>
+		-->
+		</StackPanel>
+		<StackPanel x:Name="URLs">
+		</StackPanel>
 	</StackPanel>
 </Window>

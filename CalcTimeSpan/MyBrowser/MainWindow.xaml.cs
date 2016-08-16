@@ -20,26 +20,35 @@ namespace MyBrowser {
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
 	public partial class MainWindow:Window {
+		protected string url = String.Empty;
 		public MainWindow() {
 			InitializeComponent();
 			Left=
 			Top=0;
+			PerseCommandLine();
+			if(!String.IsNullOrEmpty(url)&&url.StartsWith("msbsj:")) {
+				ProcessStartInfo prinf = new ProcessStartInfo(url);
+				Process browser = Process.Start(prinf);
+				this.Close();
+			}
 		}
-		private void Image1_MouseUp(object sender,MouseButtonEventArgs e) {
-			Image im = sender as Image;
+		void PerseCommandLine() {
 			string[] urls = Environment.GetCommandLineArgs();
-			string url = String.Empty;
 			if(urls.Length>1) {
 				url=urls[1];
 				FileInfo urn = new FileInfo(url);
 				if(urn.Extension.Contains("url")) {
 					using(FileStream fs = urn.OpenRead()) {
-						using(StreamReader sr=new StreamReader(fs)) {
+						using(StreamReader sr = new StreamReader(fs)) {
 							while(!sr.EndOfStream) {
 								string line = sr.ReadLine();
 								Match Ma = Regex.Match(line,"URL=(?<path>.*)$",RegexOptions.IgnoreCase);
 								if(Ma.Success) {
 									url=Ma.Groups["path"].Value;
+									TextBlock tb = new TextBlock();
+									tb.Text=url;
+									tb.FontFamily=new FontFamily("Courier New");
+									URLs.Children.Add(tb);
 									break;
 								}
 							}
@@ -47,19 +56,13 @@ namespace MyBrowser {
 					}
 				}
 			}
+		}
+		private void Image1_MouseUp(object sender,MouseButtonEventArgs e) {
+			Image im = sender as Image;
 			ProcessStartInfo prinf = new ProcessStartInfo((string)im.Tag,url);
 			Process browser = Process.Start(prinf);
-			browser.Exited+=Browser_Exited;
-			browser.ErrorDataReceived+=Browser_ErrorDataReceived;
-			browser.Disposed+=Browser_Disposed;
 			browser.WaitForInputIdle();
 			this.Close();
-		}
-		private void Browser_Disposed(object sender,EventArgs e) {
-		}
-		private void Browser_ErrorDataReceived(object sender,DataReceivedEventArgs e) {
-		}
-		private void Browser_Exited(object sender,EventArgs e) {
 		}
 	}
 }
