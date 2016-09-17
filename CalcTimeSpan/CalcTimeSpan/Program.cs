@@ -11,7 +11,7 @@ namespace CalcTimeSpan {
 		static bool skip = false,quit=false;
 		[STAThread]
 		static void Main(string[] args) {
-			Console.Title="";
+			Console.Title="YouTube music title editor";
 			Console.WriteLine("You can (q)uit anytime.");
 			for(;;) {
 				Console.Write("Current TimeSpan : ");
@@ -85,6 +85,7 @@ namespace CalcTimeSpan {
 		private static void fillWithData() {
 			Application app = new Application();
 			using(YouTubeMusicHelper win = new YouTubeMusicHelper(dic)) {
+				win.Title=Console.Title;
 				app.Run(win);
 			}
 		}

@@ -1,8 +1,7 @@
-﻿using System;
+﻿// $Header: $
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Controls;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -15,7 +14,6 @@ namespace CalcTimeSpan {
 			dics=dict;
 			Width=1024/2;
 			Height=768/2;
-			Title="YouTube music title editor";
 			this.Content=Edit();
 		}
 		object Edit() {
