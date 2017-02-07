@@ -18,18 +18,28 @@ namespace MyBrowser {
 			InitializeComponent();
 			Left=
 			Top=0;
-			PerseCommandLine();
-			if(!String.IsNullOrEmpty(url)&&url.StartsWith("msbsj:")) {
-				ProcessStartInfo prinf = new ProcessStartInfo(url);
-				Process browser = Process.Start(prinf);
-				this.Close();
+			FileInfo urn=PerseCommandLine();
+			if(urn!=null) {
+				Match Ma = Regex.Match(urn.FullName,"(?<word>[a-zA-Z ]+)[[]",RegexOptions.IgnoreCase);
+				if(Ma.Success) {
+					string word = Ma.Groups["word"].Value;
+					word=word.Trim().Replace(" ","-");
+					ProcessStartInfo prinf = new ProcessStartInfo(String.Format("http://www.macmillandictionary.com/dictionary/american/{0}",word));
+					Process browser = Process.Start(prinf);
+				}
+				if(!String.IsNullOrEmpty(url)&&url.StartsWith("msbsj:")) {
+					ProcessStartInfo prinf = new ProcessStartInfo(url);
+					Process browser = Process.Start(prinf);
+					this.Close();
+				}
 			}
 		}
-		void PerseCommandLine() {
+		FileInfo PerseCommandLine() {
 			string[] urls = Environment.GetCommandLineArgs();
+			FileInfo urn = null;
 			if(urls.Length>1) {
 				url=urls[1];
-				FileInfo urn = new FileInfo(url);
+				urn = new FileInfo(url);
 				if(urn.Extension.Contains("url")) {
 					using(FileStream fs = urn.OpenRead()) {
 						using(StreamReader sr = new StreamReader(fs)) {
@@ -49,6 +59,7 @@ namespace MyBrowser {
 					}
 				}
 			}
+			return urn;
 		}
 		private void Image1_MouseUp(object sender,MouseButtonEventArgs e) {
 			Image im = sender as Image;
