@@ -52,6 +52,7 @@ namespace MyBrowser {
 									tb.Text=url;
 									tb.FontFamily=new FontFamily("Courier New");
 									URLs.Children.Add(tb);
+									this.Width=Math.Max(this.Width,url.Length*8);
 									break;
 								}
 							}
@@ -67,6 +68,10 @@ namespace MyBrowser {
 			Process browser = Process.Start(prinf);
 			browser.WaitForInputIdle();
 			this.Close();
+		}
+		private void MacMillan_Click(object sender,RoutedEventArgs e) {
+			MenuItem mi = sender as MenuItem;
+			mi.IsChecked=!mi.IsChecked;
 		}
 	}
 }

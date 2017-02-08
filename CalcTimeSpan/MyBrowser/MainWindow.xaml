@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyBrowser"
         mc:Ignorable="d"
-        Title="Which browser?" Height="94.479" Width="160" WindowStyle="ToolWindow" Icon="MyBrowser.ico" WindowStartupLocation="CenterOwner" ResizeMode="CanResizeWithGrip">
+        Title="Which browser you wanna use?" Height="105.479" Width="160" WindowStyle="ToolWindow" Icon="MyBrowser.ico" WindowStartupLocation="CenterOwner" ResizeMode="CanResizeWithGrip">
 	<StackPanel>
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 			<StackPanel.Resources>
@@ -22,5 +22,8 @@
 		</StackPanel>
 		<StackPanel x:Name="URLs">
 		</StackPanel>
+		<Menu x:Name="menu" Height="100" Visibility="Hidden">
+			<MenuItem x:Name="MacMillan" IsChecked="True" Header="MacMillan" Click="MacMillan_Click"/>
+		</Menu>
 	</StackPanel>
 </Window>
