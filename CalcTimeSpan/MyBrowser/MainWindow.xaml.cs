@@ -20,12 +20,16 @@ namespace MyBrowser {
 			Top=0;
 			FileInfo urn=PerseCommandLine();
 			if(urn!=null) {
-				Match Ma = Regex.Match(urn.FullName,"(?<word>[a-zA-Z ]+)[[]",RegexOptions.IgnoreCase);
+				//Match Ma = Regex.Match(urn.FullName,"(?<word>[a-zA-Z ]+)[[]",RegexOptions.IgnoreCase);
+				Match Ma = Regex.Match(urn.FullName,"(?<word>[a-zA-Z ]+)(?<brac>[[]..[]])",RegexOptions.IgnoreCase);
 				if(Ma.Success) {
 					string word = Ma.Groups["word"].Value;
-					word=word.Trim().Replace(" ","-");
-					ProcessStartInfo prinf = new ProcessStartInfo(String.Format("http://www.macmillandictionary.com/dictionary/american/{0}",word));
-					Process browser = Process.Start(prinf);
+					string brac = Ma.Groups["brac"].Value;
+					if(!(brac=="[和英]"||brac=="[国語]")) {
+						word=word.Trim().Replace(" ","-");
+						ProcessStartInfo prinf = new ProcessStartInfo(String.Format("http://www.macmillandictionary.com/dictionary/american/{0}",word));
+						Process browser = Process.Start(prinf);
+					}
 				}
 				if(!String.IsNullOrEmpty(url)&&url.StartsWith("msbsj:")) {
 					ProcessStartInfo prinf = new ProcessStartInfo(url);
