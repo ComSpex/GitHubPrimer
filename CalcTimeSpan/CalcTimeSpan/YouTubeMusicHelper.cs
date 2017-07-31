@@ -10,7 +10,7 @@ namespace CalcTimeSpan {
 	public class YouTubeMusicHelper:Window,IDisposable {
 		protected Dictionary<TimeSpan,TimeSpan> dics;
 		public FileInfo output = new FileInfo("output.txt");
-		protected bool loaded = false;
+		protected bool loaded = false,changed=false;
 		public YouTubeMusicHelper(Dictionary<TimeSpan,TimeSpan> dict) {
 			dics=dict;
 			Width=1024/2;
@@ -83,6 +83,10 @@ namespace CalcTimeSpan {
 				grid.Children.Add(tb);
 				Grid.SetColumn(tb,1);
 				grid.ColumnDefinitions[1].Width=new GridLength(250,GridUnitType.Star);
+				tb.TextChanged+=(sender,e) => {
+					changed=true;
+					loaded=false;
+				};
 			}
 			TimeSpan len=TimeSpan.MinValue, top=TimeSpan.MinValue;
 			{
@@ -105,6 +109,10 @@ namespace CalcTimeSpan {
 				Grid.SetColumn(tb,3);
 				grid.ColumnDefinitions[3].Width=new GridLength(60,GridUnitType.Star);
 				len=TimeSpan.Parse(cols[3]);
+				tb.TextChanged+=(sender,e) => {
+					changed=true;
+					loaded=false;
+				};
 			}
 			item.Content=grid;
 			pair=new KeyValuePair<TimeSpan,TimeSpan>(top,len);
@@ -157,6 +165,11 @@ namespace CalcTimeSpan {
 			item.Content=grid;
 			return item;
 		}
+
+		private void Tb_TextChanged(object sender,TextChangedEventArgs e) {
+			throw new NotImplementedException();
+		}
+
 		private bool disposedValue = false; // To detect redundant calls
 
 		protected virtual void Dispose(bool disposing) {
@@ -172,6 +185,11 @@ namespace CalcTimeSpan {
 		private void Save() {
 			if(loaded) {
 				return;
+			}
+			if(changed) {
+				if(MessageBoxResult.No==MessageBox.Show("Will you save?",this.Title,MessageBoxButton.YesNo,MessageBoxImage.Question)) {
+					return;
+				}
 			}
 			ListBox Lb = this.Content as ListBox;
 			if(Lb.Items.Count>0) {
