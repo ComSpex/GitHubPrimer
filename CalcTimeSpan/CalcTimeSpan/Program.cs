@@ -16,9 +16,12 @@ namespace CalcTimeSpan {
 			for(;;) {
 				Console.Write("Current TimeSpan : ");
 				Console.ForegroundColor=ConsoleColor.White;
-				Console.WriteLine("{0:HH:mm:ss}",total);
+				Console.WriteLine("{0}",total);
 				Console.ResetColor();
 				for(string duration = Prompt();!isQuit(duration);) {
+					if(duration.Equals("load",StringComparison.CurrentCultureIgnoreCase)) {
+
+					}
 					TimeSpan result;
 					if(Regex.IsMatch(duration,"[0-9]+[:][0-9]+")&&!Regex.IsMatch(duration,"[0-9]+[:][0-9]+[:][0-9]+")) {
 						// add 00: if 00:00 so that we get 00:00:00.

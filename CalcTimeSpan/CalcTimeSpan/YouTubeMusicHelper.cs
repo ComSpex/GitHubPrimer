@@ -10,6 +10,7 @@ namespace CalcTimeSpan {
 	public class YouTubeMusicHelper:Window,IDisposable {
 		protected Dictionary<TimeSpan,TimeSpan> dics;
 		public FileInfo output = new FileInfo("output.txt");
+		protected bool loaded = false;
 		public YouTubeMusicHelper(Dictionary<TimeSpan,TimeSpan> dict) {
 			dics=dict;
 			Width=1024/2;
@@ -30,11 +31,17 @@ namespace CalcTimeSpan {
 				using(StreamReader sr = output.OpenText()) {
 					while(!sr.EndOfStream) {
 						string line = sr.ReadLine();
-						string[] cols = line.Trim().Split(' ');
-						if(cols.Length>=4) {
+						Match Ma = Regex.Match(line,"^(?<inx>[0-9 ]+)[ ](?<nam>.+)[(](?<one>[0-9]{2}:[0-9]{2})[)][ ](?<two>[0-9]{2}:[0-9]{2}:[0-9]{2})$");
+						if(Ma.Success) {
+							string[] cols = new string[4];
+							cols[0]=Ma.Groups["inx"].Value.Trim();
+							cols[1]=Ma.Groups["nam"].Value.Trim();
+							cols[2]=Ma.Groups["one"].Value.Trim();
+							cols[3]=Ma.Groups["two"].Value.Trim();
 							KeyValuePair<TimeSpan,TimeSpan> pair;
 							lb.Items.Add(Edit(cols,out pair));
 							dics.Add(pair.Key,pair.Value);
+							loaded=true;
 						}
 					}
 				}
@@ -61,6 +68,7 @@ namespace CalcTimeSpan {
 				grid.ColumnDefinitions[i].Width=GridLength.Auto;
 			}
 			{
+				// Index
 				TextBlock tb = new TextBlock();
 				tb.Text=String.Format("{0,3}",cols[0]);
 				tb.VerticalAlignment=VerticalAlignment.Center;
@@ -69,47 +77,37 @@ namespace CalcTimeSpan {
 				Grid.SetColumn(tb,0);
 			}
 			{
+				// Title
 				TextBox tb = new TextBox();
 				tb.Text=cols[1];
 				grid.Children.Add(tb);
 				Grid.SetColumn(tb,1);
 				grid.ColumnDefinitions[1].Width=new GridLength(250,GridUnitType.Star);
 			}
-			TimeSpan len = TimeSpan.MinValue;
-			TimeSpan top = TimeSpan.MinValue;
-			string ts = String.Empty;
+			TimeSpan len=TimeSpan.MinValue, top=TimeSpan.MinValue;
 			{
-				Match Ma = Regex.Match(cols[2],"[(](?<time>.*)[)]");
-				if(Ma.Success) {
-					Match ma = Regex.Match(Ma.Groups["time"].Value,"(?<time>[0-9]{2}:[0-9]{2})");
-					if(ma.Success) {
-						ts=ma.Groups["time"].Value;
-					}
-				}
-				TextBox tb = new TextBox();
-				tb.Text=String.Format("{0}",ts);
-				tb.HorizontalContentAlignment=HorizontalAlignment.Right;
+				// Accumulated Time
+				TextBlock tb = new TextBlock();
+				tb.Text=String.Format("{0}",cols[2]);
+				tb.HorizontalAlignment=HorizontalAlignment.Right;
 				grid.Children.Add(tb);
 				Grid.SetColumn(tb,2);
 				grid.ColumnDefinitions[2].Width=new GridLength(80,GridUnitType.Star);
+				top=TimeSpan.Parse(String.Format("00:{0}",cols[2]));
 			}
 			{
-				Match Ma = Regex.Match(cols[2],"[(](?<time>.*)[)]");
-				if(Ma.Success) {
-					ts=String.Format("00:{0}",ts);
-					len=TimeSpan.Parse(ts);
-					top=TimeSpan.Parse(Ma.Groups["time"].Value);
-				}
-				TextBlock tb = new TextBlock();
-				tb.Text=String.Format("{0:HH:mm:ss}",cols[3]);
+				// Song Length
+				TextBox tb = new TextBox();
+				tb.Text=String.Format("{0}",cols[3]);
 				tb.HorizontalAlignment=HorizontalAlignment.Right;
 				tb.VerticalAlignment=VerticalAlignment.Center;
 				grid.Children.Add(tb);
 				Grid.SetColumn(tb,3);
 				grid.ColumnDefinitions[3].Width=new GridLength(60,GridUnitType.Star);
+				len=TimeSpan.Parse(cols[3]);
 			}
 			item.Content=grid;
-			pair=new KeyValuePair<TimeSpan,TimeSpan>(len,top);
+			pair=new KeyValuePair<TimeSpan,TimeSpan>(top,len);
 			return item;
 		}
 
@@ -141,7 +139,7 @@ namespace CalcTimeSpan {
 			}
 			{
 				TextBox tb = new TextBox();
-				tb.Text=String.Format("{0:HH:mm:ss}",dic.Key);
+				tb.Text=String.Format("{0}",dic.Key);
 				tb.HorizontalContentAlignment=HorizontalAlignment.Right;
 				grid.Children.Add(tb);
 				Grid.SetColumn(tb,2);
@@ -149,7 +147,7 @@ namespace CalcTimeSpan {
 			}
 			{
 				TextBlock tb = new TextBlock();
-				tb.Text=String.Format("{0:HH:mm:ss}",dic.Value);
+				tb.Text=String.Format("{0}",dic.Value);
 				tb.HorizontalAlignment=HorizontalAlignment.Right;
 				tb.VerticalAlignment=VerticalAlignment.Center;
 				grid.Children.Add(tb);
@@ -160,6 +158,7 @@ namespace CalcTimeSpan {
 			return item;
 		}
 		private bool disposedValue = false; // To detect redundant calls
+
 		protected virtual void Dispose(bool disposing) {
 			if(!disposedValue) {
 				if(disposing) {
@@ -171,6 +170,9 @@ namespace CalcTimeSpan {
 			}
 		}
 		private void Save() {
+			if(loaded) {
+				return;
+			}
 			ListBox Lb = this.Content as ListBox;
 			if(Lb.Items.Count>0) {
 				if(output.Exists) {
@@ -196,7 +198,7 @@ namespace CalcTimeSpan {
 							sw.Write(" {0}",TimeSpan.Parse(length.Text));
 							sw.WriteLine();
 						}
-						sw.Flush();
+						//sw.Flush();
 					}
 				}
 			}
