@@ -102,6 +102,7 @@ namespace CalcTimeSpan {
 			{
 				// Song Length
 				TextBox tb = new TextBox();
+				tb.Tag=Int32.Parse(cols[0]);
 				tb.Text=String.Format("{0}",cols[3]);
 				tb.HorizontalAlignment=HorizontalAlignment.Right;
 				tb.VerticalAlignment=VerticalAlignment.Center;
@@ -112,11 +113,30 @@ namespace CalcTimeSpan {
 				tb.TextChanged+=(sender,e) => {
 					changed=true;
 					loaded=false;
+					Recalculate(sender,e);
 				};
 			}
 			item.Content=grid;
 			pair=new KeyValuePair<TimeSpan,TimeSpan>(top,len);
 			return item;
+		}
+
+		private void Recalculate(object sender,TextChangedEventArgs e) {
+			try {
+				dics.Clear();
+				TimeSpan total = new TimeSpan();
+				ListBox lb = this.Content as ListBox;
+				for(int i = 0;i<lb.Items.Count;++i) {
+					ListBoxItem item = lb.Items[i] as ListBoxItem;
+					Grid grid = item.Content as Grid;
+					TimeSpan len = TimeSpan.Parse((grid.Children[3] as TextBox).Text);
+					(grid.Children[2] as TextBlock).Text=String.Format("{0}",total);
+					dics.Add(total,len);
+					total+=len;
+				}
+			}catch(Exception ex) {
+				//MessageBox.Show(ex.ToString(),this.Title,MessageBoxButton.OK,MessageBoxImage.Warning);
+			}
 		}
 
 		private object Edit(int index,KeyValuePair<TimeSpan,TimeSpan> dic) {
@@ -164,10 +184,6 @@ namespace CalcTimeSpan {
 			}
 			item.Content=grid;
 			return item;
-		}
-
-		private void Tb_TextChanged(object sender,TextChangedEventArgs e) {
-			throw new NotImplementedException();
 		}
 
 		private bool disposedValue = false; // To detect redundant calls
