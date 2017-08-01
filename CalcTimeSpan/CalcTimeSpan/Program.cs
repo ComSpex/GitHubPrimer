@@ -11,8 +11,8 @@ namespace CalcTimeSpan {
 		static bool skip = false,quit=false;
 		[STAThread]
 		static void Main(string[] args) {
-			Console.Title="YouTube music title editor";
-			Console.WriteLine("You can (q)uit anytime.");
+			Console.Title="Music title editor";
+			Console.WriteLine("You can (q)uit anytime. Load 'output' file by simply hitting Enter key.");
 			for(;;) {
 				Console.Write("Current TimeSpan : ");
 				Console.ForegroundColor=ConsoleColor.White;

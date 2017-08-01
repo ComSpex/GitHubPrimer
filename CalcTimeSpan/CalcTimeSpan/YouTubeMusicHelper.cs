@@ -90,7 +90,7 @@ namespace CalcTimeSpan {
 			}
 			TimeSpan len=TimeSpan.MinValue, top=TimeSpan.MinValue;
 			{
-				// Accumulated Time
+				// Total Time
 				TextBlock tb = new TextBlock();
 				tb.Text=String.Format("{0}",cols[2]);
 				tb.HorizontalAlignment=HorizontalAlignment.Right;
@@ -134,7 +134,7 @@ namespace CalcTimeSpan {
 					dics.Add(total,len);
 					total+=len;
 				}
-			}catch(Exception ex) {
+			}catch(Exception/*ex*/) {
 				//MessageBox.Show(ex.ToString(),this.Title,MessageBoxButton.OK,MessageBoxImage.Warning);
 			}
 		}
